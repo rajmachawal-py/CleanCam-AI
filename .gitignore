@@ -28,3 +28,7 @@ service_account.json
 # OS
 .DS_Store
 Thumbs.db
+
+# ignored .env
+.env
+

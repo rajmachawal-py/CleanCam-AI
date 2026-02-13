@@ -2,13 +2,16 @@ import cv2
 from ultralytics import YOLO
 import time
 import requests
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # ---------------- CONFIG ----------------
-MODEL_PATH = "C:\\Users\\Lakshay\\Desktop\\Portfolio\\CleanCam AI\\model\\train5\\weights\\best.pt"
-CONF_THRESHOLD = 0.3
-MIN_BOX_AREA = 500
-n8n_webhook_url = "https://tabernacular-korbin-indigenously.ngrok-free.dev/webhook/12962283-57d4-413c-8a93-f6ccda6e98e7"  
+MODEL_PATH = os.getenv("MODEL_PATH")
+CONF_THRESHOLD = float(os.getenv("CONF_THRESHOLD", 0.3))
+MIN_BOX_AREA = int(os.getenv("MIN_BOX_AREA", 500))
+n8n_webhook_url = os.getenv("N8N_WEBHOOK_URL")
 
 
 # ---------- TIME-BASED ACCUMULATION VARIABLES ----------
