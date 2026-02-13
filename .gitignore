@@ -33,4 +33,5 @@ Thumbs.db
 .env
 
 # Ignore Notebook
-main.ipynb
+src/main.ipynb
+
