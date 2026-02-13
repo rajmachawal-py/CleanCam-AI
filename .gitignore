@@ -1,0 +1,30 @@
+# Virtual env
+venv/
+
+# Data & Models
+Garbage_dataset/
+model/
+runs/
+evidence/
+
+# n8n workflow folder
+CleanCam n8n/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Secrets
+service_account.json
+.env
+
+# Notebook cache
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
