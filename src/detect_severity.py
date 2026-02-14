@@ -11,13 +11,13 @@ load_dotenv()
 MODEL_PATH = os.getenv("MODEL_PATH")
 CONF_THRESHOLD = float(os.getenv("CONF_THRESHOLD", 0.3))
 MIN_BOX_AREA = int(os.getenv("MIN_BOX_AREA", 500))
-n8n_webhook_url = os.getenv("N8N_WEBHOOK_URL")
+N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL")
 
 
 # ---------- TIME-BASED ACCUMULATION VARIABLES ----------
 
 GARBAGE_PERCENT_THRESHOLD = 20.0   # % threshold for garbage
-PERSISTENCE_TIME = 10              # seconds (10 seconds for testing)
+PERSISTENCE_TIME = 300             # seconds (10 seconds for testing)
 first_detected_time = None         # stores first detection time
 complaint_triggered = False        # prevents repeated triggers
 threshold_buffer = 5.0             # buffer to avoid rapid toggling
@@ -63,14 +63,18 @@ def garbage_complaint_format(location, timestamp, garbage_percentage, elapsed_ti
 
 #---------------Send to N8N Function---------------
 def send_to_n8n(payload):
+    if not N8N_WEBHOOK_URL:
+        print("Webhook URL not configured.")
+        return
+
     try:
-        response = requests.post(n8n_webhook_url, json=payload)
+        response = requests.post(N8N_WEBHOOK_URL, json=payload, timeout=5)
         if response.status_code == 200:
             print("Complaint sent to n8n successfully.")
         else:
-            print(f"Failed to send complaint to n8n. Status code: {response.status_code}")
+            print(f"Failed to send complaint. Status: {response.status_code}")
     except Exception as e:
-        print(f"Error sending complaint to n8n: {e}")
+        print(f"Error sending complaint: {e}")
 
 
 # ---------------- MAIN LOOP ----------------
@@ -174,7 +178,7 @@ while True:
         elapsed_time = current_time - first_detected_time
         print(f"[{timestamp}] 📸 Evidence saved: {filename}")
 
-        complaint_text = garbage_complaint_format(  
+        complaint_text, payload = garbage_complaint_format(  
             location="123 Main St, Anytown",
             timestamp=timestamp,
             garbage_percentage=garbage_percentage,
@@ -183,6 +187,8 @@ while True:
         )
         print("----- Generated Complaint -----")
         print(complaint_text)
+
+        send_to_n8n(payload)
 
         complaint_triggered = True
 
@@ -200,16 +206,6 @@ while True:
         print("⚠️ FORCE COMPLAINT TRIGGER")
         first_detected_time = time.time() - (PERSISTENCE_TIME + 1)
         complaint_triggered = False
-
-
-# ---------- TEST N8N WEBHOOK ----------
-send_to_n8n({
-    "location": "TEST",
-    "timestamp": "NOW",
-    "garbage_percentage": 99,
-    "detected_time": 5,
-    "image_path": "test.jpg"
-})
 
 
 
