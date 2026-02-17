@@ -17,7 +17,7 @@ N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL")
 # ---------- TIME-BASED ACCUMULATION VARIABLES ----------
 
 GARBAGE_PERCENT_THRESHOLD = 20.0   # % threshold for garbage
-PERSISTENCE_TIME = 300             # seconds (10 seconds for testing)
+PERSISTENCE_TIME = 300             # seconds (300 seconds / 5 minutes for testing)
 first_detected_time = None         # stores first detection time
 complaint_triggered = False        # prevents repeated triggers
 threshold_buffer = 5.0             # buffer to avoid rapid toggling

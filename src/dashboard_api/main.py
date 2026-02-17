@@ -4,12 +4,12 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import os
 
-from dashboard_api.services.sheets_services import get_all_complaints, get_latest_complaint
+from services.sheets_services import get_all_complaints, get_latest_complaint
 
 # ------------------ PATH SETUP ------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-EVIDENCE_DIR = os.path.join(BASE_DIR, "..", "detect_severity", "evidence")
+EVIDENCE_DIR = os.path.join(BASE_DIR, "..", "..", "evidence")
 
 # ------------------ APP ------------------
 app = FastAPI(
